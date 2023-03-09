@@ -14,8 +14,7 @@ public class RandomUtils {
      * @return
      */
     public static int getRandomInt(int li, int ls) {
-        // TO DO
-        return 0;
+        return random.nextInt(li, ls);
     }
 
     /**
@@ -26,7 +25,9 @@ public class RandomUtils {
      * @return
      */
     public static Point getRandomPoint(int sizeX, int sizeY) {
-        // TO DO
-        return new Point(0,0);
+        int x = random.nextInt(0, sizeX);
+        int y = random.nextInt(0, sizeY);
+
+        return new Point(x, y);
     }
 }

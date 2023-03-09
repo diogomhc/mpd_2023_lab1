@@ -1,6 +1,8 @@
 package isel.mpd.painter0.view;
 
 
+import isel.mpd.painter0.utils.RandomUtils;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -10,9 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JColorChooser;
 
-import java.awt.Container;
-import java.awt.Color;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 
@@ -74,36 +74,72 @@ public class PainterFrame extends JFrame {
     }
 
     void drawRect() {
-         // TODO
+        canvas.addRect(RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+                RandomUtils.getRandomInt(MIN_WIDTH, MAX_WIDTH),
+                RandomUtils.getRandomInt(MIN_HEIGHT, MAX_HEIGHT),
+                currColor
+        );
     }
 
     void drawTriangle() {
-         // TODO
+         canvas.addTriangle(RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+                 RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+                 RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+                 currColor
+         );
     }
 
     void drawLine() {
-         // TODO
+         canvas.addLine(RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+                 RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+                 currColor
+         );
     }
 
     void drawOval() {
-        // TODO
+        canvas.addOval(RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+                RandomUtils.getRandomInt(MIN_WIDTH, MAX_WIDTH),
+                RandomUtils.getRandomInt(MIN_HEIGHT, MAX_HEIGHT),
+                currColor);
     }
 
     void drawCircle() {
-       // TODO
+       int random = RandomUtils.getRandomInt(MIN_WIDTH, MAX_WIDTH);
+       canvas.addOval(RandomUtils.getRandomPoint(CANVAS_SIZE_X, CANVAS_SIZE_Y),
+               random,
+               random,
+               currColor);
     }
 
     private void buildMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu creationSel = new JMenu("Add Shape");
 
-        // TO COMPLETE With CreationSel menu options
-
         JMenu configSel = new JMenu("Config");
         JMenuItem color = new JMenuItem("Color");
         color.addActionListener(evt -> {
             currColor = JColorChooser.showDialog(null,"Choose Color", currColor);
         });
+        creationSel.add(buildItem(SHAPE_CMD_RECT, al -> {
+            drawRect();
+            mouseHistory.append("add rectangle\n");
+        }));
+        creationSel.add(buildItem(SHAPE_CMD_TRIANGLE, al -> {
+            drawTriangle();
+            mouseHistory.append("add triangle\n");
+        }));
+        creationSel.add(buildItem(SHAPE_CMD_OVAL, al -> {
+            drawOval();
+            mouseHistory.append("add oval\n");
+        }));
+        creationSel.add(buildItem(SHAPE_CMD_LINE, al -> {
+            drawLine();
+            mouseHistory.append("add line\n");
+        }));
+        creationSel.add(buildItem(SHAPE_CMD_CIRCLE, al -> {
+            drawCircle();
+            mouseHistory.append("add circle\n");
+        }));
         configSel.add(color);
         menuBar.add(creationSel);
         menuBar.add(configSel);

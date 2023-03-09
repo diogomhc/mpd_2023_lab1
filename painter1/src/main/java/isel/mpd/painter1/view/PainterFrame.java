@@ -11,9 +11,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JColorChooser;
 
-import java.awt.Container;
-import java.awt.Color;
-import java.awt.BorderLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -32,8 +32,22 @@ public class PainterFrame extends JFrame {
     private Color currColor = Color.BLACK;
 
     // components
-    JTextArea mouseHistory;
-    PaintPanel canvas;
+    private Point start, curr;
+    private JTextArea mouseHistory;
+    private PaintPanel canvas;
+    private ConfigDrawer currDrawer;
+
+    public Point getStart() {
+        return start;
+    }
+
+    public Point getCurr(){
+        return curr;
+    }
+
+    public Color getCurrColor() {return currColor;}
+
+    public PaintPanel getCanvas() {return canvas;}
 
     public  PainterFrame(App app){
         initComponents();
@@ -43,17 +57,21 @@ public class PainterFrame extends JFrame {
         setResizable(false);
     }
 
-    private  class PaintMouselistener extends  MouseAdapter {
+    private class PaintMouselistener extends MouseAdapter {
         public void mousePressed(MouseEvent me) {
-            // TODO
+            start = me.getPoint();
+            curr = start;
+            canvas.setBuildMode(currDrawer);
         }
 
         public void mouseDragged(MouseEvent me) {
-            // TODO
+            curr = me.getPoint();
+            canvas.repaint();
         }
 
         public void mouseReleased(MouseEvent me) {
-            // TODO
+            currDrawer.build();
+            canvas.resetBuildMode();
         }
     }
 
@@ -76,17 +94,42 @@ public class PainterFrame extends JFrame {
         container.add(scroll, BorderLayout.SOUTH);
     }
 
+    private JMenuItem buildItem(String name, ActionListener action) {
+        var item = new JMenuItem(name);
+        item.addActionListener(action);
+        return item;
+    }
+
+    private void addItem(String name, JMenu menu) {
+        menu.add(buildItem(name, al -> {
+            mouseHistory.append(name);
+            currDrawer = createDrawerFromName(name);
+        }));
+    }
+
+    private ConfigDrawer createDrawerFromName(String name) {
+        return switch (name) {
+            case SHAPE_CMD_RECT -> new RectDrawer(this);
+            case SHAPE_CMD_TRIANGLE -> new TriangleDrawer(this);
+            case SHAPE_CMD_OVAL -> new OvalDrawer(this);
+            case SHAPE_CMD_LINE -> new LineDrawer(this);
+            default -> new CircleDrawer(this);
+        };
+    }
+
     private void buildMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu creationSel = new JMenu("Add Shape");
-
-        // TO COMPLETE
-
         JMenu configSel = new JMenu("Config");
         JMenuItem color = new JMenuItem("Color");
         color.addActionListener(evt -> {
             currColor = JColorChooser.showDialog(null,"Choose Color", currColor);
         });
+        addItem(SHAPE_CMD_RECT, creationSel);
+        addItem(SHAPE_CMD_TRIANGLE, creationSel);
+        addItem(SHAPE_CMD_OVAL, creationSel);
+        addItem(SHAPE_CMD_LINE, creationSel);
+        addItem(SHAPE_CMD_CIRCLE, creationSel);
         configSel.add(color);
         menuBar.add(creationSel);
         menuBar.add(configSel);

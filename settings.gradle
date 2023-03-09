@@ -10,3 +10,4 @@
 rootProject.name = 'staging'
 include('painter0')
 include('painter1')
+include('painter2')

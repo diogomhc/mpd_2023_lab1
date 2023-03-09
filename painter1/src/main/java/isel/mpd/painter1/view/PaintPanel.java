@@ -14,6 +14,17 @@ import java.awt.Point;
 public class PaintPanel extends JComponent {
 
     private BufferedImage picture;
+    private boolean buildMode;
+    private ConfigDrawer configDrawer;
+
+    public void setBuildMode(ConfigDrawer configDrawer) {
+        this.buildMode = true;
+        this.configDrawer = configDrawer;
+    }
+
+    public void resetBuildMode() {
+        this.buildMode = false;
+    }
 
     // strokes
     private BasicStroke dashedStroke = createDashed();
@@ -51,14 +62,15 @@ public class PaintPanel extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
-        // TO COMPLETE
-
         Graphics2D gc = (Graphics2D)  g;
 
         gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         g.drawImage(picture, 0, 0, null);
 
+        if(buildMode) {
+            configDrawer.draw(gc, dashedStroke);
+        }
     }
 
     public void addRect(Point start, int w, int h, Color color) {
