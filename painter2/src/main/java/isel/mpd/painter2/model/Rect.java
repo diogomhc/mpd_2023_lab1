@@ -2,7 +2,7 @@ package isel.mpd.painter2.model;
 
 import java.awt.*;
 
-public class Rect implements IShape{
+public class Rect implements IShape {
 
     private Color color;
 
@@ -19,33 +19,31 @@ public class Rect implements IShape{
 
     @Override
     public Color getColor() {
-        return null;
+        return color;
     }
 
     @Override
     public Point getRef() {
-        return null;
+        return start;
     }
 
     @Override
     public boolean intersects(IShape other) {
-        return false;
+        return ShapeUtils.intersects(this, other);
     }
 
     @Override
     public boolean contains(Point point) {
-        return false;
+        return ShapeUtils.contains(this, point);
     }
 
     @Override
     public boolean contains(IShape other) {
-        return false;
+        return ShapeUtils.contains(this, other);
     }
 
     @Override
-    public void translate(int dx, int dy) {
-
-    }
+    public void translate(int dx, int dy) {ShapeUtils.translate(this, dx, dy);}
 
     @Override
     public Rectangle getBounds() {

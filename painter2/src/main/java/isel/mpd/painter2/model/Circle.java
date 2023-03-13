@@ -2,7 +2,7 @@ package isel.mpd.painter2.model;
 
 import java.awt.*;
 
-public class Circle implements IShape{
+public class Circle implements IShape {
 
     private Color color;
 
@@ -44,7 +44,7 @@ public class Circle implements IShape{
 
     @Override
     public void translate(int dx, int dy) {
-
+        ShapeUtils.translate(this, dx, dy);
     }
 
     @Override

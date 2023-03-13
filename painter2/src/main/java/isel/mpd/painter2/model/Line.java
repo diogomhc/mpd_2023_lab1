@@ -2,7 +2,7 @@ package isel.mpd.painter2.model;
 
 import java.awt.*;
 
-public class Line implements IShape{
+public class Line implements IShape {
 
     private Color color;
 
@@ -34,17 +34,17 @@ public class Line implements IShape{
 
     @Override
     public boolean contains(Point point) {
-        return false;
+        return ShapeUtils.contains(this, point);
     }
 
     @Override
     public boolean contains(IShape other) {
-        return false;
+        return ShapeUtils.contains(this, other);
     }
 
     @Override
     public void translate(int dx, int dy) {
-
+        ShapeUtils.translate(this, dx, dy);
     }
 
     @Override
